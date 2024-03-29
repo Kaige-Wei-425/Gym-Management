@@ -52,21 +52,21 @@ def seed_tables():
             description = "Pilates is the exercise of choice for those looking to strengthen, balance, and tone",
             capacity = "15",
             duration = "45mins",
-            user = users[1]
+            user = users[0]
         ),
         Class(
             title = "Yoga",
             description = "Make your body soft",
             capacity = "10",
             duration = "1hr",
-            user = users[1]
+            user = users[0]
         ),
         Class(
             title = "Boxing",
             description = "Challanges yourself!",
             capacity = "4",
             duration = "2hrs",
-            user = users[3]
+            user = users[0]
         )
     ]
     db.session.add_all(classes)
