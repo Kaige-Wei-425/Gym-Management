@@ -21,6 +21,9 @@ def create_app():
     # Register the blue print to the falsk app
     from controllers.cli_controller import db_commands
     app.register_blueprint(db_commands)
+
+    from controllers.auth_controller import auth_bp
+    app.register_blueprint(auth_bp)
     
     # Return the instance of the app
     return app

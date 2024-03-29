@@ -15,6 +15,6 @@ class UserSchema(ma.Schema):
         fields = ("id", "name", "email", "password", "is_admin")
 
 # For handling single user
-user_shcema = UserSchema(many=True, exclude=["password"])
+user_shcema = UserSchema(exclude=["password"])
 # For handling multiple users
-users_shcema = UserSchema(exclude=["password"])
+users_shcema = UserSchema(many=True, exclude=["password"])
