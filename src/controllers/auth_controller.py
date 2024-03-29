@@ -1,10 +1,11 @@
 from flask import Blueprint, request
 from init import db, bcrypt
-from models.user import User, user_shcema
 from sqlalchemy.exc import IntegrityError
 from flask_jwt_extended import create_access_token
 from datetime import timedelta
 from psycopg2 import errorcodes
+
+from models.user import User, user_shcema
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 

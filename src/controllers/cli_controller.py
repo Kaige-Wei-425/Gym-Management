@@ -1,6 +1,7 @@
 from flask import Blueprint
 from init import db, bcrypt
 from models.user import User # Import the user model
+from models.classes import Class
 
 db_commands = Blueprint('db', __name__)
 
@@ -43,6 +44,33 @@ def seed_tables():
     ]
     # Add to session
     db.session.add_all(users)
+
+    # Add Class Data
+    classes = [
+        Class(
+            title = "Pilates",
+            description = "Pilates is the exercise of choice for those looking to strengthen, balance, and tone",
+            capacity = "15",
+            duration = "45mins",
+            user = users[0]
+        ),
+        Class(
+            title = "Yoga",
+            description = "Make your body soft",
+            capacity = "10",
+            duration = "1hr",
+            user = users[0]
+        ),
+        Class(
+            title = "Boxing",
+            description = "Challanges yourself!",
+            capacity = "4",
+            duration = "2hrs",
+            user = users[0]
+        )
+    ]
+    db.session.add_all(classes)
+
     # Commit
     db.session.commit()
     print("Table Seeded")
