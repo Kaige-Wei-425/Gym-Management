@@ -3,6 +3,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from init import db
 
 from models.classes import Class, classes_shcema, class_shcema
+from models.training import Training, training_schema
 
 # Create the blue print
 class_bp = Blueprint('classes', __name__, url_prefix='/classes')
@@ -96,3 +97,24 @@ def update_class(class_id):
     else:
         # Return
         return {"Error": f"Class: {class_id} does not exit"}, 404
+
+# Create training on the class
+@class_bp.route("/<int:class_id>/trainings", methods=["POST"])
+def create_training(class_id):
+    body_data = request.get_json()
+    stmt = db.select(Training).filter_by(id=class_id)
+    one_class = db.session.scalar(stmt)
+    # Check whether the class is exist
+    if one_class:
+        training = Training(
+            comment = body_data.get('comment'),
+            user_id = get_jwt_identity(),
+            one_class = one_class.id
+        )
+        db.session.add(training)
+        db.session.commit()
+        return training_schema.dump(training), 201
+    else:
+        return {"Error": f"Training {class_id} does not exist!"}
+    
+# Delete training
