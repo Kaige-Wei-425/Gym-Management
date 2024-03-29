@@ -22,8 +22,13 @@ def create_app():
     from controllers.cli_controller import db_commands
     app.register_blueprint(db_commands)
 
+    # Authentication login registration
     from controllers.auth_controller import auth_bp
     app.register_blueprint(auth_bp)
     
+    # Manage Classes
+    from controllers.class_controller import class_bp
+    app.register_blueprint(class_bp)
+
     # Return the instance of the app
     return app
