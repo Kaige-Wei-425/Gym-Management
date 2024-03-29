@@ -12,12 +12,15 @@ class Class(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     # first argument: specifies the class which the table is related. Second argument: create two-way relationship
     user = db.relationship('User', back_populates='classes')
+    trainings = db.relationship('Training', back_populates='one_class')
 
 # Create class schema in different cases  
 class ClassSchema(ma.Schema):
     user = fields.Nested('UserSchema', only=["name", "email"]) # refer to the schema
+    trainings = fields.List(fields.Nested('TrainingSchema', exclude=['one_class']))
+
     class Meta:
-        fields = ("id", "title", "description", "capacity", "duration", "user")
+        fields = ("id", "title", "description", "capacity", "duration", "user", "trainings")
 
 # For handling single class
 class_shcema = ClassSchema()
