@@ -53,3 +53,46 @@ def create_class():
 
     data = class_shcema.dump(new_class)
     return data, 201
+
+# Delete a class by id
+@class_bp.route("/<int:class_id>", methods=["DELETE"])
+@jwt_required()
+def delete_class(class_id):
+    # Make sure that only the authorised user can delete the product
+    # is_admin = authoriseAsAdmin()
+    # if not is_admin:
+    #     return {"Error": "Not authorised to delete the product"}, 403
+
+    stmt = db.select(Class).where(Class.id==class_id)
+    a_class = db.session.scalar(stmt)
+    if a_class:
+        db.session.delete(a_class)
+        db.session.commit()
+        return {"msg": f"Class {a_class.title} has been deleted successfully"}
+    else:
+        return {"Error": f"Class with id {class_id} does not exist"}, 404
+
+# Update class
+@class_bp.route("/<int:class_id>", methods=["PUT", "PATCH"])
+def update_class(class_id):
+    # Find the class from the db to update
+    stmt = db.select(Class).filter_by(id=class_id)
+    a_class = db.session.scalar(stmt)
+    # Get the data to be updated - received from the body of the request
+    class_fields = request.get_json()
+
+    if a_class:
+        # Update the attributes
+        # if "name" is null in product_field use the existing value
+        a_class.name = class_fields.get("title") or a_class.title
+        a_class.description = class_fields.get("description") or a_class.description
+        a_class.capacity = class_fields.get("capacity") or a_class.capacity
+        a_class.duration = class_fields.get("duration") or a_class.duration
+
+        # Commit
+        db.session.commit()
+        # Return
+        return class_shcema.dump(a_class), 201
+    else:
+        # Return
+        return {"Error": f"Class: {class_id} does not exit"}, 404
