@@ -10,13 +10,17 @@ class User(db.Model):
     password = db.Column(db.String(100), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
 
-    classes = db.relationship('Class', back_populates='user', cascade='all, delete') # If delete a user, delete all its related classes
+    classes = db.relationship('Class', back_populates='user', cascade='all, delete') # classes.py
+    #                                                     user: created in training.py
+    trainings = db.relationship('Training', back_populates='user', cascade='all, delete') # training.py
 
 # Create user schema in different cases  
 class UserSchema(ma.Schema):
+    # List: a user can have multiple classes/trainings
     classes = fields.List(fields.Nested('ClassSchema', exclude=['users']))
+    trainings = fields.List(fields.Nested('TrainingSchema', exclude=['users']))
     class Meta:
-        fields = ("id", "name", "email", "password", "is_admin", "classes")
+        fields = ("id", "name", "email", "password", "is_admin", "classes", "trainings")
 
 # For handling single user
 user_shcema = UserSchema(exclude=["password"])
