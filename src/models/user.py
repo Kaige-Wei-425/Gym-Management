@@ -10,7 +10,7 @@ class User(db.Model):
     password = db.Column(db.String(100), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
 
-    classes = db.relationship('Class', back_populates='users', cascade='all, delete') # If delete a user, delete all its related classes
+    classes = db.relationship('Class', back_populates='user', cascade='all, delete') # If delete a user, delete all its related classes
 
 # Create user schema in different cases  
 class UserSchema(ma.Schema):
